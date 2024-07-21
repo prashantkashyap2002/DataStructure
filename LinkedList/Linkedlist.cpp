@@ -55,6 +55,9 @@ void LinkedList::remove(int value) {
   return;
 }
 
+//
+// Print a node data in forward order
+//
 void LinkedList::print() {
   if (head == nullptr) {
     std::cout << "list is empty" << std::endl;
@@ -69,6 +72,9 @@ void LinkedList::print() {
   return;
 }
 
+//
+// Check if list is circular
+//
 bool LinkedList::isCircular () {
   if (head == nullptr) {
     return false;
@@ -90,6 +96,9 @@ bool LinkedList::isCircular () {
   return false;
 }
 
+//
+// Find the middle element in a linkedlist
+//
 int LinkedList::findMid () {
   if (head == nullptr) {
     std::cout << "No element " << std::endl;
@@ -105,6 +114,9 @@ int LinkedList::findMid () {
   return slowPtr->getData();
 }
 
+//
+// Print linkedlist in reverse order
+//
 void LinkedList::printReverse (Node<int> *node) {
   if (node->getNext() == nullptr) {
     std::cout << node->getData() << " ";
@@ -114,6 +126,9 @@ void LinkedList::printReverse (Node<int> *node) {
   std::cout << node->getData() << " ";
 }
 
+//
+// Reverse a linkedlist
+//
 Node<int>* LinkedList::reverseListRecurs (Node<int> *node) {
   if (node->getNext() == nullptr) {
     head = node;
