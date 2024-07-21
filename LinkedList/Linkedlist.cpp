@@ -6,7 +6,7 @@
 void LinkedList::insert(int value,
                         bool circular) {
   std::cout << "inserting value " << value << std::endl;
-  Node *newNode = new Node(value);
+  Node<int> *newNode = new Node<int>(value);
   //newNode->data = value;
   //newNode->next = nullptr;
 
@@ -105,7 +105,7 @@ int LinkedList::findMid () {
   return slowPtr->getData();
 }
 
-void LinkedList::printReverse (Node *node) {
+void LinkedList::printReverse (Node<int> *node) {
   if (node->getNext() == nullptr) {
     std::cout << node->getData() << " ";
     return;
@@ -114,7 +114,7 @@ void LinkedList::printReverse (Node *node) {
   std::cout << node->getData() << " ";
 }
 
-Node* LinkedList::reverseListRecurs (Node *node) {
+Node<int>* LinkedList::reverseListRecurs (Node<int> *node) {
   if (node->getNext() == nullptr) {
     head = node;
     return node;

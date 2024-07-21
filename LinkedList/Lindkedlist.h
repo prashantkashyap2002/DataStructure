@@ -1,29 +1,29 @@
 
 // Forward declaration
-class Node;
 class LinkedList;
 
+template <typename T>
 class Node {
 public:
-  Node (int value) {
+  Node<T> (T value) {
     this->data = value;
     this->next = nullptr;
   }
-  ~Node () {}
-  int getData () {
+  ~Node<T> () {}
+  T& getData () {
     return this->data;
   }
 
-  Node* getNext () {
+  Node<T>* getNext () {
     return this->next;
   }
 
-  void setNext (Node* node) {
+  void setNext (Node<T>* node) {
     this->next = node;
   }
 
 private:
-  int data;
+  T data;
   Node *next;
 };
 
@@ -44,8 +44,8 @@ public:
   }
 
 private:
-  Node *head;
+  Node<int> *head;
   void setCircular();
-  void printReverse(Node *node);
-  Node* reverseListRecurs(Node *node);
+  void printReverse(Node<int> *node);
+  Node<int>* reverseListRecurs(Node<int> *node);
 };
