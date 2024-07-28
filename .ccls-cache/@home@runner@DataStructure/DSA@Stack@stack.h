@@ -36,7 +36,6 @@ class Stack {
       return;
     }
 
-  //  void push(std::string value);
     void pop() {
       if (top != nullptr) {
         stNode<T> *tmp = head;
@@ -49,7 +48,7 @@ class Stack {
       }
       std::cout << "stack is empty" << std::endl;
     }
-    //std::string pop(std::string val);
+    
     T peek() {
       T retval{};
       if (top != nullptr) {
@@ -60,20 +59,7 @@ class Stack {
       }
     }
 
-#if 0
-    std::string peek(std::string val = NULL) {
-      if (strTop != nullptr) {
-        return strTop->getData();
-      } else {
-        std::cout << "stack is empty";
-        return NULL;
-      }
-    };
-#endif
-
   private:
     stNode<T> *top;
     stNode<T> *head;
-//    stNode<std::string> *strTop = nullptr;
-//    stNode<std::string> *strHead = nullptr;
 };
