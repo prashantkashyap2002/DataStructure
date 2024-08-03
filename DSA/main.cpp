@@ -1,27 +1,9 @@
+#if 0
 #include <iostream>
 #include "LinkedList/Lindkedlist.h"
 #include "Stack/stack.h"
 
-int main() {
 
-  Stack<int> st;
-  Stack<std::string> stStr;
-  std::cout << "stack Program\n";
-
-  std::cout << "peek " << st.peek() << std::endl;
-  std::cout << "str::peek " << stStr.peek() << std::endl;
-
-  st.push(10);
-  stStr.push("google");
-  stStr.push("amazon"); 
-  st.push(20); 
-  std::cout << "peek:" << st.peek() << std::endl;
-  st.pop();
-  std::cout << "peek:" << st.peek() << std::endl;
-
-  std::cout << "str::peek:" << stStr.peek() << std::endl;
-  stStr.pop();
-  std::cout << "str::peek:" << stStr.peek() << std::endl;
     
   std::cout << "\nLinkded List Program\n";
 
@@ -61,3 +43,5 @@ int main() {
   list.print();
   list.printReverse();
 }
+
+#endif

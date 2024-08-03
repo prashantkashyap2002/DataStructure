@@ -1,3 +1,29 @@
+#include "stack.h"
+#if 0
+int main() {
+
+  Stack<int> st;
+  Stack<std::string> stStr;
+  std::cout << "stack:\n";
+  
+  std::cout << "peek " << st.peek() << std::endl;
+  std::cout << "str::peek " << stStr.peek() << std::endl;
+  
+  st.push(10);
+  stStr.push("google");
+  stStr.push("amazon"); 
+  st.push(20); 
+  std::cout << "peek:" << st.peek() << std::endl;
+  st.pop();
+  std::cout << "peek:" << st.peek() << std::endl;
+  
+  std::cout << "str::peek:" << stStr.peek() << std::endl;
+  stStr.pop();
+  std::cout << "str::peek:" << stStr.peek() << std::endl;
+  
+  return 1;
+}
+#endif
 
 #if 0
 #include "stack.h"
