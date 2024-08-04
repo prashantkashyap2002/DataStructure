@@ -1,5 +1,5 @@
 #include "queue.h"
-#if 1
+#if 0
 int main () {
   std::cout << "Queue:" << std::endl;
   Queue<int> intQueue;
