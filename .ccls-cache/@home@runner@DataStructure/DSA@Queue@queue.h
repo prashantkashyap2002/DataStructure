@@ -27,8 +27,8 @@ template <typename T>
 class Queue {
   public:
     Queue() {
-      head = nullptr;
-      top = nullptr;
+      front = nullptr;
+      back = nullptr;
     }
 
     ~Queue() {}
@@ -38,45 +38,45 @@ class Queue {
         std::cout << "failed to allocate queueNode";
         return;
       }
-      node->setNext(head);
-      head = node;
-      if (top == nullptr) {
-        top = head;
+      node->setNext(front);
+      front = node;
+      if (back == nullptr) {
+        back = front;
       }
-      std::cout << "enqued:" << head->getData() << std::endl;
+      std::cout << "enqued:" << front->getData() << std::endl;
     }
 
     T peek () {
       T retval{};
-      if (top == nullptr) {
+      if (back == nullptr) {
         std::cout << "queue is empty";
         return retval;
       }
-      return top->getData();
+      return back->getData();
     }
 
     void dequeue () {
-      if (top == nullptr) {
+      if (back == nullptr) {
         std::cout << "queue is empty" << std::endl;
         return;
       }
-      std::cout << "dqueueing:" << top->getData() << std::endl;
-      if (top == head) {
-        free(top);
-        top = head = nullptr;
+      std::cout << "dqueueing:" << back->getData() << std::endl;
+      if (back == front) {
+        free(back);
+        back = front = nullptr;
         return;
       }
-      queueNode<T> *tmp = head;
-      while (tmp->getNext() != top) {
+      queueNode<T> *tmp = front;
+      while (tmp->getNext() != back) {
         tmp = tmp->getNext();
       }
-      free(top);
+      free(back);
       tmp->setNext(nullptr);
-      top = tmp;
+      back = tmp;
     }
 
   private: 
-    queueNode<T> *head;
-    queueNode<T> *top;
+    queueNode<T> *front;
+    queueNode<T> *back;
 };
 
