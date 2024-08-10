@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 
 int factorialRecursion(int num) {
   if (num <= 0)
@@ -44,4 +45,28 @@ int fibIterative (int num) {
     arr.push_back(arr[i-1] + arr[i-2]);
   }
   return arr[num-1];
+}
+
+void twoSum (std::vector<int> arr, int target, std::vector<int>& res) {
+  std::unordered_map<int,int> comp;
+  int i = 0;
+  while (i < arr.size()) {
+    auto complement = target - arr[i];
+    auto it = comp.find(complement);
+    //std::cout << "i:" << i << " val:" << arr[i] << " comp:" << complement << std::endl;
+    if (it != comp.end()) {
+      std::cout << "found the target at " << it->second << " " << i << std::endl;
+      res[0] = i;
+      res[1] = it->second;
+      return;
+    }
+    comp.insert({arr[i], i});
+    i++;
+  }
+#if 0
+  for (auto it = comp.begin(); it != comp.end(); it++) {
+    std::cout << "1st:" << it->first << " ,2nd:" << it->second << std::endl;
+  }
+#endif
+  return;
 }
