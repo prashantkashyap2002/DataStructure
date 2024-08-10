@@ -1,6 +1,6 @@
 #include "miscAlgo.h"
 
-#if 1
+#if 0
 int main () {
   int num = 7;
   std::cout << "recursive-factorial of num:" << num << " is " << factorialRecursion(num) << std::endl;
