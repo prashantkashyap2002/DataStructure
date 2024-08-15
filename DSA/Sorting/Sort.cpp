@@ -1,15 +1,18 @@
 #include "Sort.h"
 #if 1
-int main () {
-  class Sort arr;
-  arr.insert(10);
-  arr.insert(12);
-  arr.insert(5);
-  arr.insert(20);
-  arr.insert(11);
-  arr.insert(10);
- // arr.bubbleSort();
-  arr.selectionSort();
-  arr.print();
+int main() {
+  class Sort sortClass;
+  sortClass.insert(12);
+  sortClass.insert(10);
+  sortClass.insert(5);
+  sortClass.insert(20);
+  sortClass.insert(11);
+  sortClass.insert(10);
+  // arr.bubbleSort();
+  // arr.selectionSort();
+  sortClass.print(sortClass.arr);
+  sortClass.mergeSort(sortClass.arr, 0, sortClass.arr.size() - 1);
+  sortClass.print(sortClass.arr);
+
 }
 #endif
