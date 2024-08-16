@@ -64,7 +64,28 @@ class Sort {
       return;
     }
 
-    void quickSort () {
+    void quickSort (std::vector<int> &list, int low, int high) {
+      if (low >= high) return;
+      std::cout << "low:" << low << " high:" << high << std::endl;
+      int pivot = high;
+      for (int i = low; i <= high; i++) {
+        if (i == pivot) continue;
+        else if (i < pivot) {
+          if (list[i] > list[pivot]) {
+            std::swap(list[i], list[pivot]);
+            pivot = i;
+          } 
+        } else {
+          if (list[i] < list[pivot]) {
+            std::swap(list[i], list[pivot]);
+            pivot = i;
+          }
+        }
+      }
+      print(list);
+      quickSort(list, low, pivot - 1);
+      quickSort(list, pivot+1, high);
+      
       return;
     }
 
@@ -115,4 +136,5 @@ class Sort {
      
       return;
     }
+
 };
