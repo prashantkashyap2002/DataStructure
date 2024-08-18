@@ -171,13 +171,12 @@ class Sort {
         if (list[0] < list[i]) {
           reheap = true;
           std::swap(list[0], list[i]);
-        } 
-        
+        }  
       }
 
       if (reheap) {
-        // Since change in parent so rerun it again to make sure
-        // parent is always bigger than children
+        // Since there is change in parent so rerun the algo again to 
+        // make sure parent is always larger than children
         maxHeap(list, high);
       }
      // std::cout << "maxHeap:" << list[0] << " high" << high << " - ";

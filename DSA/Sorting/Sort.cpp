@@ -1,5 +1,5 @@
 #include "Sort.h"
-#if 1
+#if 0
 int main() {
   class Sort sortClass;
   
