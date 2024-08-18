@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+using namespace std;
 class Sort {
   public:
     Sort () {}
@@ -71,11 +72,13 @@ class Sort {
       for (int i = low; i <= high; i++) {
         if (i == pivot) continue;
         else if (i < pivot) {
+          // Iterating through left side to pivot
           if (list[i] > list[pivot]) {
             std::swap(list[i], list[pivot]);
             pivot = i;
           } 
         } else {
+          // Iterating through right side to pivot
           if (list[i] < list[pivot]) {
             std::swap(list[i], list[pivot]);
             pivot = i;
@@ -89,7 +92,12 @@ class Sort {
       return;
     }
 
-    void heapSort () {
+    void heapSort (std::vector<int> &list, int low, int high) {
+      for (; low < high; low++) {
+        maxHeap(list, high-low);
+        std::swap(list[0], list[high-low]);
+        //print(list);
+      }
       return;
     }
 
@@ -125,10 +133,12 @@ class Sort {
         }
       }
       if (i < lsize) {
+        // copy remaining elements from llist
         while (i < lsize) {
           list[k++] = llist[i++];
         } 
       } else {
+        // copy remaining elements from rlist
         while (j < rsize) {
           list[k++] = rlist[j++];
         } 
@@ -137,4 +147,42 @@ class Sort {
       return;
     }
 
+    void maxHeap (std::vector<int> &list, int high) {
+      // left child = i + 1
+      // right child = i + 2;
+      // parent = i
+      bool reheap = false;
+      for (int i = 0; i+2 <= high; i = i + 3) {
+        int left = (int)(i + 1);
+        int right = (int)(i + 2);
+        if (list[i] < list[left]) {
+          // left child is larger so swap with parent
+          std::swap(list[i], list[left]);
+        }
+        if (list[i] < list[right]) {
+          // Right child is larger so swap the child with parent
+          std::swap(list[i], list[right]);
+        }
+        //std::cout << "max:" << list[i] << std::endl;
+      } 
+      
+      for (int i = 0; i <= high; i = i + 3) {
+        // root is always the max
+        if (list[0] < list[i]) {
+          reheap = true;
+          std::swap(list[0], list[i]);
+        } 
+        
+      }
+
+      if (reheap) {
+        // Since change in parent so rerun it again to make sure
+        // parent is always bigger than children
+        maxHeap(list, high);
+      }
+     // std::cout << "maxHeap:" << list[0] << " high" << high << " - ";
+     // print(list);
+     // std::cout << std::endl;
+      return;
+    }
 };
