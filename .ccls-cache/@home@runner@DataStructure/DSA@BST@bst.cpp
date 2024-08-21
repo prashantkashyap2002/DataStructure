@@ -11,9 +11,9 @@ int main ()
   bst.insert(18);
   bst.insert(7);
   bst.insert(17);
-
+  bst.insert(16);
   bst.print();
-  bst.remove(18);
+  bst.remove(16);
   bst.print();
   bst.find(12);
   bst.find(9);

@@ -20,6 +20,9 @@ class bstNode {
     }
     bstNode<T>* getRight () {return this->right;}
 
+    void setData (T value) {
+      this->data = value;
+    }
     T getData () {return data;}
 
   private:
@@ -214,7 +217,7 @@ class BST {
     }
 
     void deleteNode (bstNode<T> *node, bstNode<T> *parent) {
-      cout << "deleting:" << node->getData() << " parent:" << parent->getData() << endl;
+      //cout << "deleting:" << node->getData() << " parent:" << parent->getData() << endl;
       if (node->getLeft() == nullptr && node->getRight() == nullptr) {
         // leaf node
         if (parent == nullptr) {
@@ -237,6 +240,7 @@ class BST {
           } else {
             parent->setRight(node->getRight());
           }
+          free(node);
         } else if (node->getRight() == nullptr) {
           // only left child
           if (parent->getLeft() == node) {
@@ -244,8 +248,22 @@ class BST {
           } else {
             parent->setRight(node->getLeft());
           }
+          free(node);
         } else {
           // node has both children
+          // Find the min of right subtree and replace
+          // data of node with it
+          bstNode<T> *tmp = node->getRight();
+          parent = node;
+          while(tmp != nullptr) {
+            if (tmp->getLeft() == nullptr) {
+              break;
+            }
+            parent = tmp;
+            tmp = tmp->getLeft();
+          }
+          node->setData(tmp->getData());
+          return deleteNode(tmp, parent);
         }
       }
       return;
