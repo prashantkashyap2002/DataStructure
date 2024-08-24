@@ -202,13 +202,18 @@ class BST {
       return maxDepth(root);
     }
 
+    //
+    // DFS Implementation
+    // 
+    //
     void dfs () {
+      printPreOrder(root);
       return;
     }
 
     //
     // BFS implementation
-    // Using queue to remeber the node to be visited
+    // Using queue to remember the node to be visited
     //
     void bfs () {
       queue<bstNode<T>*> q;

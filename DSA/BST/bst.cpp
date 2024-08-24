@@ -21,5 +21,7 @@ int main ()
   cout << " MaxDepth of BST:" << bst.findDepth();
   cout << " BFS: "; 
   bst.bfs();
+  cout << " DFS: "; 
+  bst.dfs();
 }
 #endif 
