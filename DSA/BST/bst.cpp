@@ -19,5 +19,7 @@ int main ()
   bst.find(9);
   cout << "Max:" << bst.findMax() << " min:" << bst.findMin();
   cout << " MaxDepth of BST:" << bst.findDepth();
+  cout << " BFS: "; 
+  bst.bfs();
 }
 #endif 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 
 using namespace std;
 template <typename T>
@@ -55,14 +56,17 @@ class BST {
       }
       
       bstNode<T> *tmp = root;
+      // iterate through the tree and insert it at current position
       while (tmp) {
         if (tmp->getData() > value) {
+          // If data is less than current node then go left
           if (tmp->getLeft() == nullptr) {
             tmp->setLeft(node);
             return;
           }
           tmp = tmp->getLeft();
         } else if (tmp->getData() < value) {
+          // if data is greater than current node then go right
           if (tmp->getRight() == nullptr) {
             tmp->setRight(node);
             return;
@@ -202,7 +206,27 @@ class BST {
       return;
     }
 
+    //
+    // BFS implementation
+    // Using queue to remeber the node to be visited
+    //
     void bfs () {
+      queue<bstNode<T>*> q;
+      q.push(root);
+      //iterarte through tree
+      while (!q.empty()) {
+        bstNode<T> *tmp = q.front();
+        q.pop();
+        cout << " " << tmp->getData();
+        if (tmp->getLeft()) {
+          // push the left node in queue for refernece 
+          q.push(tmp->getLeft());
+        }
+        if (tmp->getRight()) {
+          // push the left node in queue for refernece 
+          q.push(tmp->getRight());
+        }
+      }
       return;
     }
 
@@ -251,8 +275,8 @@ class BST {
           free(node);
         } else {
           // node has both children
-          // Find the min of right subtree and replace
-          // data of node with it
+          // Find the min of right subtree, replace
+          // data of node with it and delete the leaf node
           bstNode<T> *tmp = node->getRight();
           parent = node;
           while(tmp != nullptr) {
