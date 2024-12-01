@@ -204,7 +204,7 @@ class BST {
 
     //
     // DFS Implementation
-    // 
+    // PreOrder traversals node->left->right
     //
     void dfs () {
       printPreOrder(root);

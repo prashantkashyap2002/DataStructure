@@ -1,5 +1,5 @@
 #include "bst.h"
-#if 1
+#if 0
 int main ()
 {
   BST<int> bst(10);

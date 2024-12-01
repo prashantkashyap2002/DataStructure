@@ -18,14 +18,18 @@ class Sort {
     }
 
     void bubbleSort () {
+      bool swapped = false;
       for (int i = 0; i < arr.size(); i++) {
+        swapped = false;
         for (int j = 0; j < arr.size() - 1; j++) {
           if (arr[j] > arr[j+1]) {
             int tmp = arr[j];
             arr[j] = arr[j+1];
             arr[j+1] = tmp;
+            swapped = true;
           }
         }
+        if (!swapped) break;
       }
     }
 
@@ -42,15 +46,22 @@ class Sort {
     }
 
     void insertionSort () {
-      for (int i = 1; i < arr.size(); i++) {
-        for (int j = 0; j < i; j++) {
-          
-        }
+      for (int i = 1; i < arr.size(); ++i) {
+          int key = arr[i];
+          int j = i - 1;
+
+          /* Move elements of arr[0..i-1], that are
+             greater than key, to one position ahead
+             of their current position */
+          while (j >= 0 && arr[j] > key) {
+              arr[j + 1] = arr[j];
+              j = j - 1;
+          }
+          arr[j + 1] = key;
       }
     }
 
-    void
-    mergeSort (std::vector<int>& list, int l, int r) {
+    void mergeSort (std::vector<int>& list, int l, int r) {
       //std::cout<< "l:" << l << " r:" << r << std::endl;
       if (l >= r) {
         return;
@@ -96,7 +107,7 @@ class Sort {
       for (; low < high; low++) {
         maxHeap(list, high-low);
         std::swap(list[0], list[high-low]);
-        //print(list);
+        print(list);
       }
       return;
     }
@@ -163,7 +174,7 @@ class Sort {
           // Right child is larger so swap the child with parent
           std::swap(list[i], list[right]);
         }
-        //std::cout << "max:" << list[i] << std::endl;
+        std::cout << "max:" << list[i] << std::endl;
       } 
       
       for (int i = 0; i <= high; i = i + 3) {

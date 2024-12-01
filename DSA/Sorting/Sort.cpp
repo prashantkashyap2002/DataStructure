@@ -1,5 +1,5 @@
 #include "Sort.h"
-#if 0
+#if 1
 int main() {
   class Sort sortClass;
   
@@ -9,12 +9,14 @@ int main() {
   sortClass.insert(20);
   sortClass.insert(2);
   sortClass.insert(10);
-  // arr.bubbleSort();
-  // arr.selectionSort();
   sortClass.print(sortClass.arr);
+  // sortClass.bubbleSort();
+  // sortClass.selectionSort();
+  sortClass.insertionSort();
+  
   //sortClass.mergeSort(sortClass.arr, 0, sortClass.arr.size() - 1);
   //sortClass.quickSort(sortClass.arr, 0, sortClass.arr.size() - 1);
-  sortClass.heapSort(sortClass.arr, 0, sortClass.arr.size() - 1);
+  //sortClass.heapSort(sortClass.arr, 0, sortClass.arr.size() - 1);
   sortClass.print(sortClass.arr);
 
 }
