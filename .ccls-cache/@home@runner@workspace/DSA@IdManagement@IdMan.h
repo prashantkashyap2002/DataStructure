@@ -133,16 +133,10 @@ private:
   // Private Constructor
   IdMan() {
     // initilize id available list
-    _availableIdList.resize(cols);
-    for (auto &i : _availableIdList)
-      i.resize(rows);
-
-    for (int i = 0; i < rows; i++) {
-      for (int j = 0; j < cols; j++) {
-        _availableIdList[i][j] = true;
-      }
+    _availableIdList.resize(numBucket);
+    for (int i = 0; i < numBucket; i++) {
+      _availableIdList[i].set();
     }
-
     // starting timer thread for id cooling time
     _running = true;
     _thread = std::thread(timerRun, _intervalMs, this);
@@ -162,15 +156,10 @@ private:
   // API to find fist available id from the available list from lower id to
   // higher id number
   //
-  // TBD : This can be optimized by using bit for id space insead of int, where
-  // each integer will have space for 32 ids. This will reduce the space by 32
-  // times.
   int findFirstAvailableId() {
     for (int i = 0; i < _availableIdList.size(); i++) {
-      for (int j = 0; j < _availableIdList[i].size(); j++) {
-        if (_availableIdList[i][j] == true) {
-          return (i * rows + j + 1);
-        }
+      if (_availableIdList[i].any()) {
+        return (i * bucketSize + _availableIdList[i]._Find_first() + 1);
       }
     }
     return -1;
@@ -183,7 +172,9 @@ private:
   //
   void reserveId(int id) {
     id = id - 1;
-    _availableIdList[id / 65536][id % 65536] = false;
+    int bucketIndex = id / bucketSize;
+    int bitIndex = id % bucketSize;
+    _availableIdList[bucketIndex].reset(bitIndex);
     return;
   }
 
@@ -192,7 +183,9 @@ private:
   //
   void releaseId(int id) {
     id = id - 1;
-    _availableIdList[id / 65536][id % 65536] = true;
+    int bucketIndex = id / bucketSize;
+    int bitIndex = id % bucketSize;
+    _availableIdList[bucketIndex].set(bitIndex);
     return;
   }
 
@@ -251,7 +244,7 @@ private:
   // pending Id list where id gets added after deletion for cooling time
   std::map<int, time_t> _pendingIdList;
   // Id Available list
-  std::vector<std::vector<bool>> _availableIdList;
+  std::vector<bitset<bucketSize>> _availableIdList;
 
   // Timer related parameters
   int _intervalMs = 1000; // 1 second interval

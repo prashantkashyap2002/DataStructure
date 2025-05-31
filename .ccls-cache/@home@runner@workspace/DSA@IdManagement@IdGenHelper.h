@@ -4,9 +4,11 @@
 #include <iostream>
 using namespace std;
 
-// id space :: rows*cols = 65536*65536 = 4294967296 ids 2^32
-constexpr int rows = 65536;
-constexpr int cols = 65536;
+// Id Space = 2^32
+constexpr long int idSpaceSize = 4294967296;
+constexpr int bucketSize = 4096;
+constexpr int numBucket = idSpaceSize/bucketSize;
+
 // 2 sec cooling time for id to be available again after deletion
 constexpr int coolingTime = 2;
 std::atomic<bool> _running;
