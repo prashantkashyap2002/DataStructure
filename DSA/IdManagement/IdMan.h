@@ -233,7 +233,7 @@ private:
   // Id Available list
   std::vector<bitset<bucketSize>> _availableIdList;
 
-  // Trie root node
+  // Trie object to hold the opaque data
   TrieOpaq _opaqueDataTrie;
 
   // Timer related parameters
@@ -247,8 +247,6 @@ IdMan *IdMan::_instancePtr = nullptr;
 // Timer thread to run in background to check the pending Id list where id gets
 // added after deletion for cooling time
 //
-// TBD : This can be optimized by scheduling the timer only when there is id in
-// pendingList
 void timerRun(int interval_ms, IdMan *obj) {
   while (_running) {
     std::this_thread::sleep_for(std::chrono::milliseconds(interval_ms));

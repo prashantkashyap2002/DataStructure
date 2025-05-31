@@ -132,7 +132,8 @@ public:
           }
         }
         if (i == asciiListSize) {
-          // no child so delete the node
+          // no child the current node so safe to delete the node and set
+          // nullptr to parent
           delete current;
           parent->children[data.back() - ' '] = nullptr;
           // cout << "deleted node:" << data << endl;
@@ -143,5 +144,6 @@ public:
   }
 
 private:
+  // trie root node
   TrieOpaqNodePtr root;
 };
