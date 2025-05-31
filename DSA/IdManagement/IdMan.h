@@ -35,24 +35,19 @@ public:
   // @param len
   // @return id
   //
-  int createId(const char *data, std::size_t len) {
-    if (len == 0 || data == nullptr) {
+  int createId(const std::string &data) {
+    if (data == "") {
       std::cout << "Invalid Input" << std::endl;
       return -1;
     }
 
-    auto opqData = findOpaqueData(data, len);
+    _opaqueDataTrie.insertOpaqData(data);
+    auto opqData = _opaqueDataTrie.getOpaqData(data);
     if (opqData == nullptr) {
-      opqData = std::make_shared<OpaqueData>(data, len);
-      _opqDataSet.insert(opqData);
+      std::cout << "failed to create opaque data node" << std::endl;
     }
-
-    // Check if id is already allocated for given data, if so return the same id
-    // and insert the data in multimap
-    auto it = _idMulMap.find(opqData);
-    if (it != _idMulMap.end()) {
-      _idMulMap.insert({opqData, it->second});
-      return it->second;
+    if (opqData->getId() != -1) {
+      return opqData->getId();
     }
 
     //
@@ -61,10 +56,11 @@ public:
     int id = findFirstAvailableId();
     if (id != -1) {
       reserveId(id);
-      _idMulMap.insert({opqData, id});
       _dataMap.insert({id, opqData});
+      opqData->setId(id);
     }
-
+    // std::cout << "createdId:" << id << endl;
+    // cout << "data: " << opqData->getData() << std::endl;
     return id;
   }
 
@@ -80,43 +76,22 @@ public:
   void deleteId(int id) {
     auto it = _dataMap.find(id);
     if (it != _dataMap.end()) {
+      auto data = it->second->getData();
       // BackgroundTimer::start(coolingTime, &getInstance()->delPendingList);
-      // Delete from multiMap
-      auto itId = _idMulMap.find(it->second);
-      if (itId != _idMulMap.end()) {
-        _idMulMap.erase(itId);
-      }
-
-      if (_idMulMap.find(it->second) == _idMulMap.end()) {
-        // now safe to delete from set as well as dataMap
-        auto itSet = _opqDataSet.find(it->second);
-        if (itSet != _opqDataSet.end()) {
-          _opqDataSet.erase(itSet);
-        }
-        _dataMap.erase(it);
-
-        // Add id in pending list
-        addPendingList(id);
+      // Delete from dataMap and remove opaque data from trie
+      _opaqueDataTrie.removeOpaqData(data);
+      // Add id in pending list
+      addPendingList(id);
+      // cout << " deleting id:" << id << endl;
+      auto opqData = _opaqueDataTrie.getOpaqData(data);
+      if ((opqData == nullptr) ||
+          (opqData != nullptr && opqData->getRefCnt() <= 0)) {
+        // opaque data is not used by any id so delete it now
+        it = _dataMap.erase(it);
+        // cout << " deleted id from map:" << id << endl;
       }
     }
-
     return;
-  }
-
-  //
-  // getId API to get the id for the give data if exist otherwise return -1
-  //
-  // @param data
-  // @param len
-  // @return id;
-  //
-  int getId(const char *data, size_t len) {
-    auto dataPtr = findOpaqueData(data, len);
-    auto it = _idMulMap.find(dataPtr);
-    if (it != _idMulMap.end()) {
-      return it->second;
-    }
-    return -1;
   }
 
   //
@@ -182,6 +157,7 @@ private:
   //  @param id
   //
   void reserveId(int id) {
+    // std::cout << " reserving id:" << id << endl;
     id = id - 1;
     int bucketIndex = id / bucketSize;
     int bitIndex = id % bucketSize;
@@ -199,6 +175,7 @@ private:
     int bucketIndex = id / bucketSize;
     int bitIndex = id % bucketSize;
     _availableIdList[bucketIndex].set(bitIndex);
+    // cout << "releasing id:" << (id + 1) << endl;
     return;
   }
 
@@ -206,7 +183,6 @@ private:
   // addPendingList API to add id in the pending list after deletion
   // @param id
   //
-
   void addPendingList(int id) {
     std::lock_guard<std::mutex> lock(pendingListMutex);
     _pendingIdList.insert({id, std::time(0)});
@@ -237,37 +213,28 @@ private:
 
   //
   // findOpaqueData API to find if opaque data is already present in the data
-  //  set, if so return opaqueDataPtr
+  // set, if so return TrieOpaqNodePtr
   //
   // @param data
-  // @param size
-  // @return opaqueDataPtr
+  // @return TrieOpaqNodePtr
   //
-  opaqueDataPtr findOpaqueData(const char *data, std::size_t size) {
-    for (auto it = _opqDataSet.begin(); it != _opqDataSet.end(); ++it) {
-      opaqueDataPtr dataPtr = *it;
-      if ((std::memcmp(data, dataPtr->getData(), size) == 0) &&
-          (size == dataPtr->getSize())) {
-        return dataPtr;
-      }
-    }
-    return nullptr;
+  TrieOpaqNodePtr findOpaqueData(const std::string &data) {
+    return _opaqueDataTrie.getOpaqData(data);
   }
 
   // Static pointer to the IdMen instance
   static IdMan *_instancePtr;
 
-  // Set to hold the OpaqueData ptr
-  std::set<opaqueDataPtr> _opqDataSet;
-  // Map to hold the <OpaqueData ptr->id>
-  std::multimap<opaqueDataPtr, int> _idMulMap;
   // Map to hold the <id->OpaqueData ptr>
-  std::map<int, opaqueDataPtr> _dataMap;
+  std::map<int, TrieOpaqNodePtr> _dataMap;
 
   // pending Id list where id gets added after deletion for cooling time
   std::map<int, time_t> _pendingIdList;
   // Id Available list
   std::vector<bitset<bucketSize>> _availableIdList;
+
+  // Trie root node
+  TrieOpaq _opaqueDataTrie;
 
   // Timer related parameters
   int _intervalMs = 1000; // 1 second interval
