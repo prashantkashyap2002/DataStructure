@@ -74,6 +74,7 @@ public:
   // If Id is allocated check use_count of shared_ptr and if it is 1 then
   // release the id and add into pendingDelList for cooling time.
   // Once cooling time is over add it back to available list
+  //
   // @param id
   //
   void deleteId(int id) {
@@ -103,8 +104,11 @@ public:
   }
 
   //
-  // return the id for the give data if exist otherwise
-  // return -1;
+  // getId API to get the id for the give data if exist otherwise return -1
+  //
+  // @param data
+  // @param len
+  // @return id;
   //
   int getId(const char *data, size_t len) {
     auto dataPtr = findOpaqueData(data, len);
@@ -116,8 +120,11 @@ public:
   }
 
   //
-  // return the data for the give id if exist otherwise
-  // return nullptr;
+  // queryId API to get the opaque data for the given id if exist otherwise
+  // return nullptr
+  //
+  // @param id
+  // @return opaque data;
   //
   const char *queryId(int id) {
     auto it = _dataMap.find(id);
@@ -153,8 +160,10 @@ private:
   }
 
   //
-  // API to find fist available id from the available list from lower id to
-  // higher id number
+  // findFirstAvailableId API to find fist available id from the available list
+  // from lower id to higher id number
+  //
+  // @return id
   //
   int findFirstAvailableId() {
     for (int i = 0; i < _availableIdList.size(); i++) {
@@ -166,9 +175,11 @@ private:
   }
 
   //
-  // API to reserve id in the available list by marking it false so that it will
-  // not be available for next request until it is released and add back after
-  // cooling time
+  // reserveId API to reserve id in the available list by resetting the bit so
+  // that it will not be available for next request until it is released and add
+  // back after cooling time
+  //
+  //  @param id
   //
   void reserveId(int id) {
     id = id - 1;
@@ -179,7 +190,9 @@ private:
   }
 
   //
-  // API to add id back in the available list by marking it true
+  // releaseId API to release id in the available list by setting the bit
+  //
+  // @param id
   //
   void releaseId(int id) {
     id = id - 1;
@@ -189,7 +202,11 @@ private:
     return;
   }
 
-  // api to add id in pending list
+  //
+  // addPendingList API to add id in the pending list after deletion
+  // @param id
+  //
+
   void addPendingList(int id) {
     std::lock_guard<std::mutex> lock(pendingListMutex);
     _pendingIdList.insert({id, std::time(0)});
@@ -197,8 +214,8 @@ private:
   }
 
   //
-  //  API to remove id from pending list once cooling time expires and add it
-  //  back to available list
+  // delPendingList API to remove id from pending list once cooling time expires
+  // and add it back to available list
   //
   void delPendingList() {
     std::lock_guard<std::mutex> lock(pendingListMutex);
@@ -218,8 +235,14 @@ private:
     return;
   }
 
-  // API to find if opaque data is already present in the data set, if so return
-  // opaqueDataPtr
+  //
+  // findOpaqueData API to find if opaque data is already present in the data
+  //  set, if so return opaqueDataPtr
+  //
+  // @param data
+  // @param size
+  // @return opaqueDataPtr
+  //
   opaqueDataPtr findOpaqueData(const char *data, std::size_t size) {
     for (auto it = _opqDataSet.begin(); it != _opqDataSet.end(); ++it) {
       opaqueDataPtr dataPtr = *it;
