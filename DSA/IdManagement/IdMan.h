@@ -41,8 +41,8 @@ public:
       return -1;
     }
 
-    _opaqueDataTrie.insertOpaqData(data);
-    auto opqData = _opaqueDataTrie.getOpaqData(data);
+    auto opqData = _opaqueDataTrie.insertOpaqData(data);
+    // auto opqData = _opaqueDataTrie.getOpaqData(data);
     if (opqData == nullptr) {
       std::cout << "failed to create opaque data node" << std::endl;
     }

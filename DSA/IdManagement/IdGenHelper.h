@@ -8,7 +8,8 @@ using namespace std;
 constexpr long int idSpaceSize = 4294967296;
 constexpr int bucketSize = 4096;
 constexpr int numBucket = idSpaceSize / bucketSize;
-constexpr int asciiListSize = 128;
+constexpr int asciiListSize = 96;
+constexpr char baseAscii = ' ';
 
 // 2 sec cooling time for id to be available again after deletion
 constexpr int coolingTime = 2;
@@ -60,7 +61,7 @@ public:
   TrieOpaq() { root = new TrieOpaqNode(); }
   ~TrieOpaq() { delete root; }
 
-  void insertOpaqData(const std::string &data) {
+  TrieOpaqNodePtr insertOpaqData(const std::string &data) {
     TrieOpaqNodePtr current = root;
 
     for (auto c : data) {
@@ -73,12 +74,13 @@ public:
     current->setLeaf(true);
     current->setData(data);
     current->increamentRefCnt();
+    return current;
   }
 
   bool searchOpaqData(const std::string &data) {
     TrieOpaqNodePtr current = root;
     for (auto c : data) {
-      int index = c - ' ';
+      int index = c - baseAscii;
       if (!current->children[index]) {
         return false;
       }
@@ -90,7 +92,7 @@ public:
   TrieOpaqNodePtr getOpaqData(const std::string &data) {
     TrieOpaqNodePtr current = root;
     for (auto c : data) {
-      int index = c - ' ';
+      int index = c - baseAscii;
       if (!current->children[index]) {
         return nullptr;
       }
@@ -108,7 +110,7 @@ public:
     TrieOpaqNodePtr current = root;
     TrieOpaqNodePtr parent = root;
     for (auto c : data) {
-      int index = c - ' ';
+      int index = c - baseAscii;
       if (!current->children[index]) {
         std::cout << "data not found" << std::endl;
         return;
